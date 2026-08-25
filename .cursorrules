@@ -1,0 +1,62 @@
+# Proje: Dinamik IdentityProvider Destekli Auth Sistemi (ASP.NET Core MVC + JWT)
+
+## Genel
+Staj projesi. Kullanıcılar e-posta/şifre ve dış sağlayıcılarla (Google, Microsoft, GitHub, LinkedIn)
+giriş yapar. JWT, rol/yetki bazlı menü. Sağlayıcı ayarları mümkün olduğunca DB'den okunur.
+
+Yol haritası: docs/PLAN.md. Her günün sonunda docs/gunluk-raporlar/YYYY-MM-DD.md yaz
+(üç başlık: plan, sorunlar, çözümler). Şablon: docs/gunluk-raporlar/SABLON.md.
+
+Ön yüz kilitli: Razor MVC (.cshtml). React/Angular yok.
+4. OAuth sağlayıcısı: LinkedIn. Faz 6 (yalnızca Google) bitmeden diğer sağlayıcılara geçme.
+
+## Teknoloji (değiştirme)
+- Backend: ASP.NET Core MVC (.NET 8), C#
+- Auth: ASP.NET Core Identity + JWT Bearer (access + refresh)
+- Dış giriş: OAuth2 / OIDC — Google, Microsoft/Entra ID, GitHub, LinkedIn
+- Veritabanı: MSSQL + EF Core (Code First, Migrations)
+- Test: xUnit (opsiyonel, tercih edilir)
+
+## Mimari
+Katmanlar: Web / Application / Domain / Infrastructure.
+Controller'lara iş mantığı yazma; servislere delege et.
+IdentityProviders tablosu: ClientId, ClientSecret (secret store), Authority, Scopes, DisplayName, Enabled.
+Secret'lar appsettings.json'a düz yazılmaz; User Secrets / env / Key Vault.
+JWT: access kısa ömürlü (~15 dk), refresh DB'de rotate. Claims'te role/permission.
+Menü görünürlüğü frontend'de olabilir; gerçek yetki HER ZAMAN backend'de [Authorize] ile doğrulanır.
+
+## Kod
+- .NET naming: PascalCase sınıf/metot, camelCase local, I prefix interface.
+- async/await; .Result/.Wait() yok.
+- DTO kullan; entity'yi controller'dan dışarı verme.
+- FluentValidation veya DataAnnotations.
+- Şifre, client secret, token ASLA loglanmaz, ASLA commit edilmez.
+- Şifre hash: yalnızca ASP.NET Identity hasher.
+
+## Migration
+Her şema değişikliği ayrı migration, anlamlı isim. Elle SQL ile bypass yok.
+Seed: roller ve admin — DataSeeder veya DbContext seed.
+
+## Cursor
+Yeni dosyadan önce mevcut deseni incele.
+Derlenebilir kod; hayali NuGet yok.
+Auth/secret konusunda kısayol önerme; production-ready pratik.
+Belirsiz gereksinimde varsayma; sor.
+
+## Değişiklik sonrası anlatım (her seferinde zorunlu)
+Projede bir şey değiştirdiğinde (kod, config, dosya, kural) iş bitince kullanıcıya
+sade dilde, jargon sıkıştırmadan şunları anlat. "Önemli adım" şartı yok; her değişiklik.
+
+1. Ne yaptın? Hangi dosyalar değişti, ne eklendi / silindi / düzeltildi.
+2. Niçin yaptın? Bu yol neden seçildi; alternatif varsa kısaca neden değil.
+3. Şimdi ne oldu? Sonuç ne: çalışır mı, nasıl dene, sonraki adım ne.
+
+Örnek ton: "Login POST'u Identity'ye bağladım çünkü form şu an sahte hata basıyordu.
+AccountController ve AuthService değişti. Kayıt ol → giriş yap ile deneyebilirsin."
+
+## Yapma
+- Client secret'ı appsettings.json'a düz metin yazma
+- God Controller
+- Sadece frontend rol gizleme
+- Migration'ı manuel SQL ile atlama
+- Faz 6 bitmeden Microsoft/GitHub/LinkedIn ekleme

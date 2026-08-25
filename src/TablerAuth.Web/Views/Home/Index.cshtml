@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Pretitle"] = "Overview";
+    var displayName = User.FindFirst("display_name")?.Value ?? User.Identity?.Name;
+}
+
+<div class="row row-cards">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Welcome, @displayName</h3>
+                <p class="text-secondary mb-0">You are signed in. Admin menu items appear in the sidebar when your account has the Admin role.</p>
+            </div>
+        </div>
+    </div>
+</div>

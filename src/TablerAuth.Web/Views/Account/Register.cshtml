@@ -1,0 +1,58 @@
+@model RegisterViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Sign up";
+}
+
+<form class="card card-md" asp-controller="Account" asp-action="Register" method="post" novalidate>
+    <div class="card-body">
+        <h2 class="card-title text-center mb-4">Create new account</h2>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+        }
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" placeholder="Enter name" autocomplete="name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" placeholder="Enter email" autocomplete="email" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Password"></label>
+            <div class="input-group input-group-flat">
+                <input asp-for="Password" class="form-control" placeholder="Password" autocomplete="new-password" />
+                <span class="input-group-text">
+                    <a href="#" class="link-secondary js-password-toggle" title="Show password" data-bs-toggle="tooltip" aria-label="Show password">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+                    </a>
+                </span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="ConfirmPassword"></label>
+            <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm password" autocomplete="new-password" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-check">
+                <input asp-for="AcceptTerms" class="form-check-input" />
+                <span class="form-check-label">Agree the <a href="#" tabindex="-1">terms and policy</a>.</span>
+            </label>
+        </div>
+
+        <div class="form-footer">
+            <button type="submit" class="btn btn-primary w-100">Create new account</button>
+        </div>
+    </div>
+</form>
+
+<div class="text-center text-secondary mt-3">
+    Already have account? <a asp-controller="Account" asp-action="Login" tabindex="-1">Sign in</a>
+</div>

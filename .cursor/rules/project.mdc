@@ -1,0 +1,82 @@
+---
+description: ASP.NET Core MVC + JWT IdentityProvider auth project conventions and architecture
+alwaysApply: true
+---
+
+# Proje: Dinamik IdentityProvider Destekli Auth Sistemi (ASP.NET Core MVC + JWT)
+
+## Genel Bağlam
+Bu proje bir staj projesidir. Amaç: kullanıcıların hem klasik (email/şifre) hem de
+harici sağlayıcılar (Google, Microsoft, GitHub, +1) ile OAuth2/OIDC üzerinden
+giriş yapabildiği, JWT tabanlı, rol/yetki bazlı menü gösterimi yapan bir web
+uygulaması. Sağlayıcılar mümkün olduğunca DB'den okunan konfigürasyonla
+dinamik eklenebilir olmalı.
+
+## Teknoloji Yığını (sabit, değiştirme)
+- Backend: ASP.NET Core MVC (.NET 8), C#
+- Auth: ASP.NET Core Identity + JWT Bearer (access + refresh token)
+- Dış Girişler: OAuth2 / OpenID Connect (Google, Microsoft/Entra ID, GitHub, + 1 ek sağlayıcı örn. Auth0/Okta/Facebook)
+- Veritabanı: MSSQL + Entity Framework Core (Code First, Migrations)
+- Ön yüz: Razor Pages ya da ayrı SPA (React/Angular) — proje başında hangisi seçildiyse ona sadık kal
+- Test: xUnit (opsiyonel ama tercih edilir)
+
+## Mimari Prensipler
+- Katmanlı mimari kullan: `Api` (veya `Web`) / `Application` / `Domain` / `Infrastructure`
+  şeklinde ayrım yap; controller'lara iş mantığı yazma, servislere delege et.
+- Identity Provider ayarları (ClientId, ClientSecret, Authority/Endpoint, Scopes,
+  DisplayName, Enabled) bir `IdentityProviders` tablosunda tutulmalı; hardcoded
+  appsettings.json'a sağlayıcı bilgisi gömmekten kaçın (secret'lar hariç, onlar
+  User Secrets / Key Vault / environment variable ile yönetilmeli).
+- Yeni bir sağlayıcı eklemek kod değişikliği değil, DB'ye kayıt eklemek +
+  gerekiyorsa generic bir OIDC handler'ın configürasyonunu güncellemek şeklinde
+  olmalı. Bunun teknik olarak neden zor/kolay olduğunu README'de belgelendir.
+- JWT: access token kısa ömürlü (ör. 15 dk), refresh token DB'de saklanıp
+  rotate edilmeli. Claims içinde `role`/`permission` bilgisi taşınmalı.
+- Yetkilendirme: `[Authorize(Policy = "...")]` veya claim-based policy kullan;
+  menü görünürlüğü front-end'de claim/role kontrolüyle yapılmalı, ama gerçek
+  yetki kontrolü HER ZAMAN backend'de de tekrar doğrulanmalı (frontend
+  kontrolü tek başına güvenlik önlemi SAYILMAZ).
+
+## Kod Standartları
+- C# için resmi .NET naming convention (PascalCase sınıf/metot, camelCase
+  local değişken, `I` prefix interface).
+- Async her yerde: `async/await`, `Task<T>` dönüş tipleri; `.Result`/`.Wait()`
+  KULLANMA (deadlock riski).
+- DTO kullan; Entity'leri doğrudan controller'dan dışarı verme.
+- Girdi doğrulama: FluentValidation veya DataAnnotations ile model validasyonu.
+- Hassas bilgi (şifre, client secret, token) ASLA loglanmaz, ASLA git'e commit
+  edilmez. `.gitignore` içinde `appsettings.Development.json`, `*.user` vb. olsun.
+- Şifreler ASP.NET Identity'nin kendi hashleme mekanizmasıyla saklanır,
+  kendi hash fonksiyonunu yazma.
+
+## Migration / DB
+- Her şema değişikliği ayrı bir migration olmalı, anlamlı isim ver
+  (`AddIdentityProvidersTable` gibi), migration'ları asla elle DB'de düzeltme.
+- Seed data (varsayılan roller, admin kullanıcı) `DbContext` seed veya ayrı bir
+  `DataSeeder` sınıfında olmalı.
+
+## Cursor'a Özel Talimatlar
+- Yeni bir dosya/özellik oluşturmadan önce ilgili klasördeki mevcut deseni
+  (naming, DI kaydı, response şekli) incele ve onu takip et.
+- Üretilen kodun derlenebilir ve mevcut proje yapısına uygun olduğundan emin ol;
+  hayali NuGet paketi veya var olmayan API çağırma.
+- Güvenlikle ilgili konularda (auth, token, secret yönetimi) kısayol önerme;
+  "production-ready" pratik öner, sadece demo/happy-path yazma.
+- Belirsiz bir gereksinim varsa varsayım yapıp ilerlemek yerine önce sor.
+
+## Değişiklik sonrası anlatım (her seferinde zorunlu)
+Projede bir şey değiştirdiğinde (kod, config, dosya, kural) iş bitince kullanıcıya
+sade dilde, jargon sıkıştırmadan şunları anlat. "Önemli adım" şartı yok; her değişiklik.
+
+1. Ne yaptın? Hangi dosyalar değişti, ne eklendi / silindi / düzeltildi.
+2. Niçin yaptın? Bu yol neden seçildi; alternatif varsa kısaca neden değil.
+3. Şimdi ne oldu? Sonuç ne: çalışır mı, nasıl dene, sonraki adım ne.
+
+Örnek ton: "Login POST'u Identity'ye bağladım çünkü form şu an sahte hata basıyordu.
+AccountController ve AuthService değişti. Kayıt ol → giriş yap ile deneyebilirsin."
+
+## Yapma
+- Client secret'ları appsettings.json'a düz metin yazma.
+- Tek bir "God Controller" içine tüm endpoint'leri toplama.
+- Frontend'deki rol kontrolünü tek güvenlik katmanı olarak sunma.
+- Migration'ları manuel SQL ile bypass etme.

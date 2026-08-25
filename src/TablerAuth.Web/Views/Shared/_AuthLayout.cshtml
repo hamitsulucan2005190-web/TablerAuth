@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>@(ViewData["Title"] ?? "Account")</title>
+    <link rel="stylesheet" href="~/lib/tabler/css/tabler.min.css" asp-append-version="true" />
+    <style>
+        @@import url("https://rsms.me/inter/inter.css");
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <script src="~/lib/tabler/js/tabler-theme.min.js" asp-append-version="true"></script>
+
+    <div class="page page-center">
+        <div class="container container-tight py-4">
+            <div class="text-center mb-4">
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand navbar-brand-autodark" aria-label="Home">
+                    <img src="~/lib/tabler/img/logo.svg" alt="" height="32" class="navbar-brand-image" />
+                </a>
+            </div>
+
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="~/lib/tabler/js/tabler.min.js" asp-append-version="true" defer></script>
+    <script>
+        document.addEventListener("click", function (event) {
+            var toggle = event.target.closest(".js-password-toggle");
+            if (!toggle) return;
+            event.preventDefault();
+            var input = toggle.closest(".input-group").querySelector("input");
+            input.type = input.type === "password" ? "text" : "password";
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{54A838F9-BC87-4D7B-9804-03DB18A1C40A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TablerAuth.Web", "src\TablerAuth.Web\TablerAuth.Web.csproj", "{9B3EBB7F-31AC-46FC-A97C-C79D5B206D9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TablerAuth.Application", "src\TablerAuth.Application\TablerAuth.Application.csproj", "{DDBE1395-0551-4EAD-874D-D520461085A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TablerAuth.Domain", "src\TablerAuth.Domain\TablerAuth.Domain.csproj", "{457D191F-0D7A-4B15-9DA6-8CD8E3118DF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TablerAuth.Infrastructure", "src\TablerAuth.Infrastructure\TablerAuth.Infrastructure.csproj", "{0C58A396-2238-4749-A608-275EDAB44AEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B3EBB7F-31AC-46FC-A97C-C79D5B206D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3EBB7F-31AC-46FC-A97C-C79D5B206D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3EBB7F-31AC-46FC-A97C-C79D5B206D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3EBB7F-31AC-46FC-A97C-C79D5B206D9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDBE1395-0551-4EAD-874D-D520461085A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDBE1395-0551-4EAD-874D-D520461085A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDBE1395-0551-4EAD-874D-D520461085A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDBE1395-0551-4EAD-874D-D520461085A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{457D191F-0D7A-4B15-9DA6-8CD8E3118DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{457D191F-0D7A-4B15-9DA6-8CD8E3118DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{457D191F-0D7A-4B15-9DA6-8CD8E3118DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{457D191F-0D7A-4B15-9DA6-8CD8E3118DF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C58A396-2238-4749-A608-275EDAB44AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C58A396-2238-4749-A608-275EDAB44AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C58A396-2238-4749-A608-275EDAB44AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C58A396-2238-4749-A608-275EDAB44AEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9B3EBB7F-31AC-46FC-A97C-C79D5B206D9F} = {54A838F9-BC87-4D7B-9804-03DB18A1C40A}
+		{DDBE1395-0551-4EAD-874D-D520461085A9} = {54A838F9-BC87-4D7B-9804-03DB18A1C40A}
+		{457D191F-0D7A-4B15-9DA6-8CD8E3118DF6} = {54A838F9-BC87-4D7B-9804-03DB18A1C40A}
+		{0C58A396-2238-4749-A608-275EDAB44AEB} = {54A838F9-BC87-4D7B-9804-03DB18A1C40A}
+	EndGlobalSection
+EndGlobal
