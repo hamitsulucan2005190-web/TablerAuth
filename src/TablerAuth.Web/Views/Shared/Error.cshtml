@@ -1,16 +1,16 @@
 ﻿@model ErrorViewModel
 @{
-    ViewData["Title"] = "Error";
-    ViewData["Pretitle"] = "Something went wrong";
+    ViewData["Title"] = "Hata";
+    ViewData["Pretitle"] = "Bir şeyler ters gitti";
 }
 
 <div class="card">
     <div class="card-body">
-        <p class="text-secondary">An error occurred while processing your request.</p>
+        <p class="text-secondary">İsteğiniz işlenirken bir hata oluştu.</p>
         @if (Model.ShowRequestId)
         {
             <p class="mb-0">
-                <strong>Request ID:</strong> <code>@Model.RequestId</code>
+                <strong>İstek kimliği:</strong> <code>@Model.RequestId</code>
             </p>
         }
     </div>

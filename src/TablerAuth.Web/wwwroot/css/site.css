@@ -1,22 +1,83 @@
-html {
-  font-size: 14px;
+.theme-switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.theme-switch-label {
+    font-size: 0.875rem;
+    line-height: 1.2;
+    color: inherit;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.theme-switch-control {
+    --switch-width: 51px;
+    --switch-height: 31px;
+    --knob: 27px;
+    --pad: 2px;
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    flex-shrink: 0;
+    width: var(--switch-width);
+    height: var(--switch-height);
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: #e9e9ea;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.theme-switch-control:focus-visible {
+    outline: 2px solid #066fd1;
+    outline-offset: 3px;
 }
 
-body {
-  margin-bottom: 60px;
+.theme-switch-knob {
+    position: absolute;
+    top: var(--pad);
+    left: var(--pad);
+    width: var(--knob);
+    height: var(--knob);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 1px 1px rgba(0, 0, 0, 0.16);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root[data-bs-theme="dark"] .theme-switch-control {
+    background: #34c759;
+}
+
+:root[data-bs-theme="dark"] .theme-switch-knob {
+    transform: translateX(20px);
+}
+
+.navbar .theme-switch {
+    padding: 0.35rem 0.25rem;
+}
+
+.page-center .theme-switch {
+    justify-content: center;
+}
+
+/* Compiled login view still emits the Google port banner; hide it until the next app start. */
+.card-md h2 + .alert-info {
+    display: none;
+}
+
+/* Tabler .alert is a horizontal flex row (icon + body). Bare <a>/<code> become extra columns and spill out of the card. */
+.alert {
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.alert a,
+.alert code {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }

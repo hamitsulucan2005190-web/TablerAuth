@@ -1,10 +1,24 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
-    ViewData["Pretitle"] = "Legal";
+    ViewData["Title"] = "Gizlilik politikası";
+    ViewData["Pretitle"] = "Yasal";
 }
 
 <div class="card">
     <div class="card-body">
-        <p class="text-secondary mb-0">Use this page to detail your site's privacy policy. Authentication is not connected yet.</p>
+        <p>
+            TablerAuth bir eğitim uygulamasıdır. Giriş yapmanız ve doğru menülerin görünmesi için gereken en az bilgiyi saklar.
+        </p>
+        <ul>
+            <li>Yerel hesap açarsanız ad, e-posta ve hash’lenmiş şifre.</li>
+            <li>Yönetici sayfalarını sunucuda kilitlemek için roller (Admin veya User). users.manage gibi izinler rolden türetilir.</li>
+            <li>Google, GitHub, LinkedIn veya genel OpenID Connect ile girerseniz o sağlayıcı bir kimlik ve, izin verdiğinizde, e-posta ile görünen ad gönderir.</li>
+            <li>API yenileme jetonları hash’lenerek saklanır. Erişim jetonları kısa ömürlüdür; rol ve izin claim’leri taşır.</li>
+            <li>OAuth istemci gizlileri veritabanında tutulmaz. Uygulama yalnızca User Secrets, ortam değişkeni veya Key Vault’taki anahtar adını saklar.</li>
+        </ul>
+        <p class="mb-0">
+            Ayrı bir e-posta listesi yoktur. Şifre sıfırlama bağlantısı SMTP (bu projede Gmail) ile gönderilir;
+            User Secrets’ta SMTP kullanıcı ve uygulama şifresi olmalıdır.
+            Yerel geliştirmede gönderim başarısız olursa, hesap varsa ekranda yedek bir bağlantı da gösterilir.
+        </p>
     </div>
 </div>

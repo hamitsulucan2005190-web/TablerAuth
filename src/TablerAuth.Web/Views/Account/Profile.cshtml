@@ -1,25 +1,3 @@
-@{
-    ViewData["Title"] = "Profile";
-    var displayName = User.FindFirst("display_name")?.Value ?? "—";
-    var email = User.Identity?.Name ?? "—";
-    var roles = string.Join(", ", User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(claim => claim.Value));
-}
+@model TablerAuth.Application.Auth.SignedInUserInfo
 
-<div class="card">
-    <div class="card-body">
-        <div class="datagrid">
-            <div class="datagrid-item">
-                <div class="datagrid-title">Name</div>
-                <div class="datagrid-content">@displayName</div>
-            </div>
-            <div class="datagrid-item">
-                <div class="datagrid-title">Email</div>
-                <div class="datagrid-content">@email</div>
-            </div>
-            <div class="datagrid-item">
-                <div class="datagrid-title">Roles</div>
-                <div class="datagrid-content">@(string.IsNullOrWhiteSpace(roles) ? "—" : roles)</div>
-            </div>
-        </div>
-    </div>
-</div>
+<partial name="_AccountDetails" model="Model" />

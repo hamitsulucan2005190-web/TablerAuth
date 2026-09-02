@@ -6,13 +6,14 @@
 }
 
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>@(ViewData["Title"] ?? "Dashboard")</title>
+    <title>@(ViewData["Title"] ?? "Kontrol paneli")</title>
     <link rel="stylesheet" href="~/lib/tabler/css/tabler.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         @@import url("https://rsms.me/inter/inter.css");
     </style>
@@ -20,75 +21,73 @@
 </head>
 <body>
     <script src="~/lib/tabler/js/tabler-theme.min.js" asp-append-version="true"></script>
-    <a href="#content" class="visually-hidden-focusable skip-link">Skip to main content</a>
+    <a href="#content" class="visually-hidden-focusable skip-link">Ana içeriğe geç</a>
 
     <div class="page">
         <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
             <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle sidebar navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Kenar menüyü aç">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="navbar-brand navbar-brand-autodark">
-                    <a asp-controller="Home" asp-action="Index" class="d-flex align-items-center gap-2" aria-label="Home">
-                        <img src="~/lib/tabler/img/logo-mark.svg" alt="" height="32" width="32" class="navbar-brand-image" />
-                        <span class="d-none d-lg-inline">App</span>
+                    <a asp-controller="Home" asp-action="Index" class="d-flex align-items-center gap-2" aria-label="TablerAuth">
+                        <img src="~/lib/tabler/img/logo-mark.svg" alt="" height="44" width="44" class="navbar-brand-image" />
+                        <span class="d-none d-lg-inline">TablerAuth</span>
                     </a>
                 </div>
 
-                <nav class="collapse navbar-collapse" id="sidebar-menu" aria-label="Sidebar">
+                <nav class="collapse navbar-collapse" id="sidebar-menu" aria-label="Kenar menü">
                     <ul class="navbar-nav pt-lg-3">
                         <li class="nav-item">
                             <a class="@NavClass("Home", "Index")" asp-controller="Home" asp-action="Index">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
                                 </span>
-                                <span class="nav-link-title">Dashboard</span>
+                                <span class="nav-link-title">Kontrol paneli</span>
                             </a>
                         </li>
 
-                        @if (User.IsInRole("Admin"))
+                        @if (User.HasClaim(AppClaimTypes.Permission, AppPermissions.UsersManage))
                         {
                             <li class="nav-item">
                                 <a class="@NavClass("Users")" asp-controller="Users" asp-action="Index">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
                                     </span>
-                                    <span class="nav-link-title">Users</span>
+                                    <span class="nav-link-title">Kullanıcılar</span>
                                 </a>
                             </li>
+                        }
+                        @if (User.HasClaim(AppClaimTypes.Permission, AppPermissions.ProvidersManage))
+                        {
                             <li class="nav-item">
                                 <a class="@NavClass("IdentityProviders")" asp-controller="IdentityProviders" asp-action="Index">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" /><path d="M12 11m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 12l0 3.5" /></svg>
                                     </span>
-                                    <span class="nav-link-title">Identity Providers</span>
+                                    <span class="nav-link-title">Giriş sağlayıcıları</span>
                                 </a>
                             </li>
+                        }
+                        @if (User.HasClaim(AppClaimTypes.Permission, AppPermissions.RolesView))
+                        {
                             <li class="nav-item">
                                 <a class="@NavClass("Roles")" asp-controller="Roles" asp-action="Index">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 15m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M13.4 11.6l3.6 -3.6" /><path d="M19 5m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /></svg>
                                     </span>
-                                    <span class="nav-link-title">Roles</span>
+                                    <span class="nav-link-title">Roller</span>
                                 </a>
                             </li>
                         }
 
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item">
-                                <a class="@NavClass("Account", "Profile")" asp-controller="Account" asp-action="Profile">
-                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
-                                    </span>
-                                    <span class="nav-link-title">Profile</span>
-                                </a>
-                            </li>
-                        }
                     </ul>
 
                     <div class="mt-auto mb-3">
+                        <div class="px-2 mb-2">
+                            <partial name="_ThemeToggle" />
+                        </div>
                         <ul class="navbar-nav">
                             @if (User.Identity?.IsAuthenticated == true)
                             {
@@ -97,12 +96,12 @@
                                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" /></svg>
                                         </span>
-                                        <span class="nav-link-title">@(User.FindFirst("display_name")?.Value ?? User.Identity?.Name ?? "Account")</span>
+                                        <span class="nav-link-title">@(User.FindFirst("display_name")?.Value ?? User.Identity?.Name ?? "Hesap")</span>
                                     </a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profile</a>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profil</a>
                                         <form asp-controller="Account" asp-action="Logout" method="post">
-                                            <button type="submit" class="dropdown-item">Logout</button>
+                                            <button type="submit" class="dropdown-item">Çıkış</button>
                                         </form>
                                     </div>
                                 </li>
@@ -114,7 +113,7 @@
                                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M15 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M21 12h-13l3 -3" /><path d="M11 15l-3 -3" /></svg>
                                         </span>
-                                        <span class="nav-link-title">Sign in</span>
+                                        <span class="nav-link-title">Giriş yap</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -122,7 +121,7 @@
                                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
                                         </span>
-                                        <span class="nav-link-title">Sign up</span>
+                                        <span class="nav-link-title">Kayıt ol</span>
                                     </a>
                                 </li>
                             }
@@ -133,7 +132,7 @@
         </aside>
 
         <div class="page-wrapper">
-            <div class="page-header d-print-none" aria-label="Page header">
+            <div class="page-header d-print-none" aria-label="Sayfa başlığı">
                 <div class="container-xl">
                     <div class="row g-2 align-items-center">
                         <div class="col">
@@ -141,7 +140,7 @@
                             {
                                 <div class="page-pretitle">@pretitle</div>
                             }
-                            <h2 class="page-title">@(ViewData["Title"] ?? "Dashboard")</h2>
+                            <h2 class="page-title">@(ViewData["Title"] ?? "Kontrol paneli")</h2>
                             @if (ViewData["Description"] is string description)
                             {
                                 <div class="text-secondary mt-1">@description</div>
@@ -166,7 +165,10 @@
                         <div class="col-12">
                             <ul class="list-inline list-inline-dots mb-0">
                                 <li class="list-inline-item">
-                                    Copyright &copy; @DateTime.UtcNow.Year
+                                    Telif hakkı &copy; @DateTime.UtcNow.Year
+                                </li>
+                                <li class="list-inline-item">
+                                    <a asp-controller="Home" asp-action="Privacy">Gizlilik</a>
                                 </li>
                             </ul>
                         </div>
@@ -177,6 +179,7 @@
     </div>
 
     <script src="~/lib/tabler/js/tabler.min.js" asp-append-version="true" defer></script>
+    <script src="~/js/site.js" asp-append-version="true" defer></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,58 +1,67 @@
 @model RegisterViewModel
 @{
     Layout = "_AuthLayout";
-    ViewData["Title"] = "Sign up";
+    ViewData["Title"] = "Kayıt ol";
 }
 
 <form class="card card-md" asp-controller="Account" asp-action="Register" method="post" novalidate>
     <div class="card-body">
-        <h2 class="card-title text-center mb-4">Create new account</h2>
+        <h2 class="card-title text-center mb-4">Yeni hesap oluştur</h2>
 
         @if (!ViewData.ModelState.IsValid)
         {
-            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
         }
 
         <div class="mb-3">
             <label class="form-label" asp-for="Name"></label>
-            <input asp-for="Name" class="form-control" placeholder="Enter name" autocomplete="name" />
+            <input asp-for="Name" class="form-control" placeholder="Adınız" autocomplete="name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label" asp-for="Email"></label>
-            <input asp-for="Email" class="form-control" placeholder="Enter email" autocomplete="email" />
+            <input asp-for="Email" class="form-control" placeholder="E-posta adresiniz" autocomplete="email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label" asp-for="Password"></label>
             <div class="input-group input-group-flat">
-                <input asp-for="Password" class="form-control" placeholder="Password" autocomplete="new-password" />
+                <input asp-for="Password" class="form-control" placeholder="Şifre" autocomplete="new-password" />
                 <span class="input-group-text">
-                    <a href="#" class="link-secondary js-password-toggle" title="Show password" data-bs-toggle="tooltip" aria-label="Show password">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+                    <a href="#" class="link-secondary js-password-toggle" title="Şifreyi göster" aria-label="Şifreyi göster" aria-pressed="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1 js-password-show"><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1 d-none js-password-hide"><path d="M10.585 10.587a2 2 0 0 0 2.829 2.83" /><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" /><path d="M3 3l18 18" /></svg>
                     </a>
                 </span>
             </div>
+            <div class="form-hint">En az 8 karakter; büyük ve küçük harf, rakam ve özel karakter içermeli.</div>
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label" asp-for="ConfirmPassword"></label>
-            <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm password" autocomplete="new-password" />
+            <input asp-for="ConfirmPassword" class="form-control" placeholder="Şifreyi tekrar yazın" autocomplete="new-password" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-check">
                 <input asp-for="AcceptTerms" class="form-check-input" />
-                <span class="form-check-label">Agree the <a href="#" tabindex="-1">terms and policy</a>.</span>
+                <span class="form-check-label"><a asp-controller="Home" asp-action="Privacy">Şartları ve gizlilik politikasını</a> kabul ediyorum.</span>
             </label>
+            <span asp-validation-for="AcceptTerms" class="text-danger"></span>
         </div>
 
         <div class="form-footer">
-            <button type="submit" class="btn btn-primary w-100">Create new account</button>
+            <button type="submit" class="btn btn-primary w-100">Yeni hesap oluştur</button>
         </div>
     </div>
+
+    <partial name="_ExternalLoginButtons" model="Model.ExternalProviders" />
 </form>
 
 <div class="text-center text-secondary mt-3">
-    Already have account? <a asp-controller="Account" asp-action="Login" tabindex="-1">Sign in</a>
+    Zaten hesabınız var mı? <a asp-controller="Account" asp-action="Login">Giriş yap</a>
 </div>

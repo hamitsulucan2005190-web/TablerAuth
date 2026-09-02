@@ -7,7 +7,7 @@ alwaysApply: true
 
 ## Genel Bağlam
 Bu proje bir staj projesidir. Amaç: kullanıcıların hem klasik (email/şifre) hem de
-harici sağlayıcılar (Google, Microsoft, GitHub, +1) ile OAuth2/OIDC üzerinden
+harici sağlayıcılar (Google, GitHub, LinkedIn) ile OAuth2/OIDC üzerinden
 giriş yapabildiği, JWT tabanlı, rol/yetki bazlı menü gösterimi yapan bir web
 uygulaması. Sağlayıcılar mümkün olduğunca DB'den okunan konfigürasyonla
 dinamik eklenebilir olmalı.
@@ -15,7 +15,7 @@ dinamik eklenebilir olmalı.
 ## Teknoloji Yığını (sabit, değiştirme)
 - Backend: ASP.NET Core MVC (.NET 8), C#
 - Auth: ASP.NET Core Identity + JWT Bearer (access + refresh token)
-- Dış Girişler: OAuth2 / OpenID Connect (Google, Microsoft/Entra ID, GitHub, + 1 ek sağlayıcı örn. Auth0/Okta/Facebook)
+- Dış Girişler: OAuth2 / OpenID Connect (Google, GitHub, LinkedIn)
 - Veritabanı: MSSQL + Entity Framework Core (Code First, Migrations)
 - Ön yüz: Razor Pages ya da ayrı SPA (React/Angular) — proje başında hangisi seçildiyse ona sadık kal
 - Test: xUnit (opsiyonel ama tercih edilir)
@@ -74,6 +74,12 @@ sade dilde, jargon sıkıştırmadan şunları anlat. "Önemli adım" şartı yo
 
 Örnek ton: "Login POST'u Identity'ye bağladım çünkü form şu an sahte hata basıyordu.
 AccountController ve AuthService değişti. Kayıt ol → giriş yap ile deneyebilirsin."
+
+## Geliştirme sunucusu
+- `http://localhost:5059` veya `https://localhost:7258` dinliyorsa sunucuya dokunma: yeniden başlatma, kill, `docker compose down` yok.
+- Kapalıysa `/tmp/tablerauth-keepup.sh` ile aç (Cursor açıkken ayakta, Cursor kapanınca durur). Agent arka plan görevi olarak `dotnet run` takibi yapma. `dotnet watch` kullanma.
+- Agent sohbeti bitince süreci kapatma.
+- Sayfa kontrolü için sunucuyu aç-kapa yapma; `curl` yeter.
 
 ## Yapma
 - Client secret'ları appsettings.json'a düz metin yazma.

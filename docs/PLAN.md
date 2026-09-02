@@ -1,12 +1,12 @@
 # TablerAuth — 8 Fazlı Öğrenme Planı
 
-Staj projesi: kullanıcılar hem e-posta/şifre hem de dış sağlayıcılarla (Google, Microsoft, GitHub, LinkedIn) giriş yapabilsin. JWT, rol bazlı menü, sağlayıcı ayarları mümkün olduğunca veritabanından gelsin.
+Staj projesi: kullanıcılar hem e-posta/şifre hem de dış sağlayıcılarla (Google, GitHub, LinkedIn) giriş yapabilsin. JWT, rol bazlı menü, sağlayıcı ayarları mümkün olduğunca veritabanından gelsin.
 
 Bu dosya yol haritasıdır. Her fazda sırayla: **neden** → **hangi dosya ne işe yarar** → **kod** → **nasıl test edilir**. Bir fazın başarı kriteri dolmadan sonrakine geçilmez.
 
 **Ön yüz kararı (kilitli):** Razor MVC (`.cshtml`). React/Angular yok.
 
-**4. dış giriş:** LinkedIn. Google, Microsoft ve GitHub sabit; dördüncü LinkedIn.
+**Dış giriş (üç):** Google, GitHub, LinkedIn. Facebook ve Microsoft hesaplarına girilemediği için projeden çıkarıldı; dördüncü sağlayıcı şu an yok.
 
 ---
 
@@ -70,7 +70,7 @@ Faz 1 (çalışan MVC + secrets + git)
   → Faz 2 (Tabler sayfaları gerçek projede)
     → Faz 3 (Identity + MSSQL + kayıt/login cookie)
       → Faz 4 (JWT)  → Faz 5 (roller ve menü)
-                    ↘ Faz 6 (yalnızca Google) → Faz 7 (dinamik + Microsoft, GitHub, LinkedIn)
+                    ↘ Faz 6 (yalnızca Google) → Faz 7 (dinamik + GitHub, LinkedIn)
                                                   → Faz 8 (temizlik + README + teslim)
 ```
 
@@ -198,7 +198,7 @@ Layout taslağı zaten `@if (User.IsInRole("Admin"))` kullanır. Asıl iş: User
 
 **Öğreneceğin kavramlar:** OAuth2 authorization code, redirect URI, ClientId/Secret, harici login → yerel kullanıcı eşleme.
 
-Sırayı bozma: Google bitmeden Microsoft / GitHub / LinkedIn yok.
+Sırayı bozma: Google bitmeden GitHub / LinkedIn yok.
 
 **Akış**
 
@@ -219,20 +219,22 @@ ClientId / ClientSecret User Secrets'a gider; sohbete yapıştırılmaz. Google 
 
 `IdentityProviders` tablosu (özet): `DisplayName`, `Scheme`, `ClientId`, `ClientSecret` (secret store referansı, düz metin tercih değil), `Authority`, `Scopes`, `Enabled`.
 
-Sonra aynı yapıya Microsoft, GitHub ve **LinkedIn** eklenir.
+Sonra aynı yapıya GitHub ve **LinkedIn** eklenir.
 
-Dürüst not (README'ye de yazılacak): GitHub ve LinkedIn klasik OIDC discovery ile her zaman uymaz; Google/Microsoft OIDC'ye daha yakındır. Model "DB + handler tipi"dir, sihirli tek handler değil. Enabled=false olan buton görünmez.
+Dürüst not (README ve TESLIM'de de): GitHub ve LinkedIn klasik OIDC discovery ile her zaman uymaz; Google OIDC'ye daha yakındır. Model "DB + handler tipi"dir, sihirli tek handler değil. Generic OIDC ayrı `OpenIdConnect` handler'ı ve zorunlu Authority ister. Enabled=false olan buton görünmez.
 
-**Başarı kriteri:** Dört sağlayıcı gerçek hesapla giriş; kapalı olan listede yok.
+**Başarı kriteri:** Üç hazır sağlayıcı gerçek hesapla giriş; kapalı olan listede yok. Facebook / Microsoft yok. Generic OIDC formda seçilebilir.
 
 ---
 
 ## Faz 8 — Temizlik, test, dokümantasyon
 
-- Kullanılmayan Tabler/demo kalıntısı
-- README: nasıl çalıştırılır, hangi secret'lar, migration
-- Uçtan uca: kayıt, şifre login, 4 sağlayıcı, rol menü
-- Teslim özeti + 3–5 dakikalık demo tıklama listesi
+- Kullanılmayan MVC şablon kalıntısı (Bootstrap/jQuery) temizlendi
+- README: nasıl çalıştırılır, hangi secret'lar, migration, OIDC, permission
+- Teslim özeti: `docs/TESLIM.md` + 3–5 dakikalık demo
+- xUnit: token rotate, son Admin, rol→izin, secret anahtarı
+
+Uçtan uca: kayıt, şifre login, 3 sağlayıcı, rol menü, API `/api/me`.
 
 ---
 
@@ -243,4 +245,4 @@ Dürüst not (README'ye de yazılacak): GitHub ve LinkedIn klasik OIDC discovery
 - Sadece frontend'de rol gizlemek
 - Migration'ı elle SQL ile atlamak
 - Kendi şifre hash fonksiyonunu yazmak
-- Faz 6 bitmeden diğer OAuth sağlayıcılarına geçmek
+- Faz 6 bitmeden GitHub/LinkedIn eklemek

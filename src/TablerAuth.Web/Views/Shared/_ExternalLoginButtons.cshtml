@@ -1,0 +1,26 @@
+@model IReadOnlyList<TablerAuth.Application.Auth.ExternalProvider>
+@{
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+@if (Model.Count > 0)
+{
+    <div class="hr-text">veya</div>
+
+    <div class="card-body">
+        <form asp-controller="Account" asp-action="ExternalLogin" method="post">
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+            <div class="row g-2">
+                @foreach (var provider in Model)
+                {
+                    <div class="col-12">
+                        <button type="submit" name="provider" value="@provider.Scheme" class="btn w-100">
+                            <partial name="_ExternalProviderIcon" model="provider.Scheme" />
+                            @provider.DisplayName ile giriş yap
+                        </button>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+}

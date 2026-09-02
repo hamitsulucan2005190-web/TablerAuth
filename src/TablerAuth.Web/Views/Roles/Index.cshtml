@@ -1,0 +1,63 @@
+@model IReadOnlyList<TablerAuth.Application.Admin.RoleListItem>
+@{
+    ViewData["Title"] = "Roller";
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Bu sayfa ne işe yarar</h3>
+        <p class="text-secondary mb-2">
+            Roller Kullanıcılar sayfasında verilir. Bu liste bir sayaçtır; yeni rol uydurma yeri değildir.
+            İzinler rol’den kodla türetilir (ayrı permission tablosu yok).
+        </p>
+        <ul class="text-secondary mb-0">
+            <li><strong>Admin</strong> — users.manage, roles.view ve providers.manage verir. Bu sayfalar User adresi yazsa bile kilitli kalır.</li>
+            <li><strong>User</strong> — giriş yapabilir, kontrol paneli ve Profil’i kullanır. Admin bağlantıları gizlenir ve sunucuda da engellenir.</li>
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-vcenter card-table">
+            <thead>
+                <tr>
+                    <th>Rol</th>
+                    <th>İzinler</th>
+                    <th class="w-1">Kullanıcılar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="3" class="text-secondary">Henüz rol yok.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var role in Model)
+                    {
+                        <tr>
+                            <td>@role.Name</td>
+                            <td>
+                                @if (role.Permissions.Count == 0)
+                                {
+                                    <span class="text-secondary">—</span>
+                                }
+                                else
+                                {
+                                    foreach (var permission in role.Permissions)
+                                    {
+                                        <span class="badge bg-azure-lt">@permission</span>
+                                    }
+                                }
+                            </td>
+                            <td class="text-secondary">@role.UserCount</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

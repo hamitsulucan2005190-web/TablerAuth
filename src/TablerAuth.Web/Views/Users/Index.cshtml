@@ -1,0 +1,111 @@
+@model IReadOnlyList<TablerAuth.Application.Admin.UserListItem>
+@{
+    ViewData["Title"] = "Kullanıcılar";
+    var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+}
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success alert-dismissible" role="status">
+        <div class="d-flex">
+            <div>@statusMessage</div>
+        </div>
+        <a class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></a>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <div class="d-flex">
+            <div>@errorMessage</div>
+        </div>
+        <a class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></a>
+    </div>
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Bu sayfa ne işe yarar</h3>
+        <p class="text-secondary mb-0">
+            Admin hesapları kenar menüde Kullanıcılar, Roller ve Giriş sağlayıcılarını görür.
+            Bu bağlantıları gizlemek asıl kilit değildir — <code>/Users</code> yazan bir User yine sunucu tarafından engellenir.
+            Son Admin alınamaz; böylece bu sayfaları açabilecek kimse kalmaz.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-vcenter card-table">
+            <thead>
+                <tr>
+                    <th>Ad</th>
+                    <th>E-posta</th>
+                    <th>Roller</th>
+                    <th class="w-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="4" class="text-secondary">Henüz kullanıcı yok.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var user in Model)
+                    {
+                        var isSelf = string.Equals(user.Id, currentUserId, StringComparison.Ordinal);
+                        <tr>
+                            <td>
+                                @(string.IsNullOrWhiteSpace(user.DisplayName) ? "—" : user.DisplayName)
+                                @if (isSelf)
+                                {
+                                    <span class="badge bg-secondary-lt ms-1">Siz</span>
+                                }
+                            </td>
+                            <td>@user.Email</td>
+                            <td>
+                                @if (user.Roles.Count == 0)
+                                {
+                                    <span class="text-secondary">—</span>
+                                }
+                                else
+                                {
+                                    foreach (var role in user.Roles)
+                                    {
+                                        <span class="badge bg-blue-lt">@role</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <form asp-action="SetAdmin" method="post">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <input type="hidden" name="isAdmin" value="@((!user.IsAdmin).ToString().ToLowerInvariant())" />
+                                    @if (user.IsAdmin)
+                                    {
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                title="Bu hesaptan Admin’i kaldır">
+                                            Admin’i kaldır
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-success"
+                                                title="Bu hesabın yönetici sayfalarını açmasına izin ver">
+                                            Admin yap
+                                        </button>
+                                    }
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

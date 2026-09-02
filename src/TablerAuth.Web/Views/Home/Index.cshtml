@@ -1,16 +1,63 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
-    ViewData["Pretitle"] = "Overview";
-    var displayName = User.FindFirst("display_name")?.Value ?? User.Identity?.Name;
+﻿@model TablerAuth.Application.Auth.SignedInUserInfo
+@{
+    var greetingName = string.IsNullOrWhiteSpace(Model.DisplayName) ? Model.Email : Model.DisplayName;
+    var canManageUsers = User.HasClaim(AppClaimTypes.Permission, AppPermissions.UsersManage);
+    var canManageProviders = User.HasClaim(AppClaimTypes.Permission, AppPermissions.ProvidersManage);
+    var canViewRoles = User.HasClaim(AppClaimTypes.Permission, AppPermissions.RolesView);
 }
 
 <div class="row row-cards">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">Welcome, @displayName</h3>
-                <p class="text-secondary mb-0">You are signed in. Admin menu items appear in the sidebar when your account has the Admin role.</p>
+                <h3 class="card-title">Hoş geldiniz, @greetingName</h3>
+                <p class="text-secondary mb-0">
+                    Giriş yaptınız.
+                    Rolleriniz ve bağlı giriş yöntemleri için <a asp-controller="Account" asp-action="Profile">Profil</a>’e bakın.
+                </p>
             </div>
         </div>
     </div>
 </div>
+
+@if (canManageUsers || canManageProviders || canViewRoles)
+{
+    <div class="row row-cards mt-3">
+        @if (canManageUsers)
+        {
+            <div class="col-md-4">
+                <a asp-controller="Users" asp-action="Index" class="card card-link">
+                    <div class="card-body">
+                        <div class="subheader">Yönetim</div>
+                        <h3 class="card-title mb-1">Kullanıcılar</h3>
+                        <p class="text-secondary mb-0">Hesapları görün, Admin verin veya alın.</p>
+                    </div>
+                </a>
+            </div>
+        }
+        @if (canManageProviders)
+        {
+            <div class="col-md-4">
+                <a asp-controller="IdentityProviders" asp-action="Index" class="card card-link">
+                    <div class="card-body">
+                        <div class="subheader">Yönetim</div>
+                        <h3 class="card-title mb-1">Giriş sağlayıcıları</h3>
+                        <p class="text-secondary mb-0">Google, GitHub, LinkedIn ve genel OpenID düğmelerini açın veya kapatın.</p>
+                    </div>
+                </a>
+            </div>
+        }
+        @if (canViewRoles)
+        {
+            <div class="col-md-4">
+                <a asp-controller="Roles" asp-action="Index" class="card card-link">
+                    <div class="card-body">
+                        <div class="subheader">Yönetim</div>
+                        <h3 class="card-title mb-1">Roller</h3>
+                        <p class="text-secondary mb-0">Admin’in açabildiği ve User’ın açamadığı sayfalar.</p>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}

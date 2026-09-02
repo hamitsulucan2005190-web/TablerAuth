@@ -1,0 +1,108 @@
+@model IdentityProviderFormViewModel
+@{
+    ViewData["Title"] = Model.IsNew ? "Yeni sağlayıcı" : $"{Model.DisplayName} düzenle";
+}
+
+<div class="card" data-provider-form="true" data-is-new="@Model.IsNew.ToString().ToLowerInvariant()">
+    <form asp-action="Save" method="post" novalidate>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="card-body">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            }
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label required" asp-for="Kind"></label>
+                    <select asp-for="Kind" class="form-select js-provider-kind">
+                        <option value="">Sağlayıcı türü seçin</option>
+                        @foreach (var kind in Model.Kinds)
+                        {
+                            if (kind.HandlerInstalled)
+                            {
+                                <option value="@kind.Value"
+                                        data-scheme="@kind.DefaultScheme"
+                                        data-callback="@kind.DefaultCallbackPath"
+                                        data-scopes="@kind.DefaultScopes"
+                                        data-secret-key="@kind.DefaultSecretKey"
+                                        data-requires-authority="@kind.RequiresAuthority.ToString().ToLowerInvariant()">@(kind.Value == "Oidc" ? "OpenID Connect (genel)" : kind.Value)</option>
+                            }
+                            else
+                            {
+                                <option value="@kind.Value" disabled="disabled">@(kind.Value == "Oidc" ? "OpenID Connect (genel)" : kind.Value) (kodda henüz bağlı değil)</option>
+                            }
+                        }
+                    </select>
+                    <div class="form-hint">Bu düğmenin konuştuğu hizmet. Veritabanındaki satır yetmez; o tür kodda da bağlı olmalıdır.</div>
+                    <span asp-validation-for="Kind" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label required" asp-for="DisplayName"></label>
+                    <input asp-for="DisplayName" class="form-control js-provider-display-name" placeholder="Google" />
+                    <div class="form-hint">Giriş düğmesinde görünür: … ile giriş yap</div>
+                    <span asp-validation-for="DisplayName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label required" asp-for="Scheme"></label>
+                    <input asp-for="Scheme" class="form-control js-provider-scheme" placeholder="Google" />
+                    <div class="form-hint">Yalnızca uygulama kullanır (örneğin Google). Sabit tutun; dönüş adresinin de parçasıdır.</div>
+                    <span asp-validation-for="Scheme" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label required" asp-for="ClientId"></label>
+                    <input asp-for="ClientId" class="form-control" autocomplete="off" />
+                    <div class="form-hint">Sağlayıcının geliştirici konsolundaki herkese açık kimlik. Gizli değildir.</div>
+                    <span asp-validation-for="ClientId" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <label class="form-label required" asp-for="ClientSecretKey"></label>
+                    <input asp-for="ClientSecretKey" class="form-control js-provider-secret-key" placeholder="Authentication:Google:ClientSecret" autocomplete="off" />
+                    <div class="alert alert-warning mt-2 mb-1" role="status">
+                        <div>
+                            Bu <strong>gizlinin kendisi değildir</strong>. Gizliyi User Secrets’a (veya ortam değişkenine / Key Vault’a) yapıştırın.
+                            Buraya yalnızca anahtar adını yazın, örneğin <code>Authentication:LinkedIn:ClientSecret</code>.
+                        </div>
+                    </div>
+                    <span asp-validation-for="ClientSecretKey" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="CallbackPath"></label>
+                    <input asp-for="CallbackPath" class="form-control js-provider-callback" placeholder="/signin-google" />
+                    <div class="form-hint">Kullanıcı onayladıktan sonra sağlayıcının gönderdiği yer. Boş bırakırsanız varsayılan kullanılır, örneğin /signin-google.</div>
+                    <span asp-validation-for="CallbackPath" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="Scopes"></label>
+                    <input asp-for="Scopes" class="form-control js-provider-scopes" placeholder="openid profile email" />
+                    <div class="form-hint">Giriş sırasında istenen profil parçaları, boşlukla ayrılır. Boş bırakırsanız varsayılan kullanılır.</div>
+                    <span asp-validation-for="Scopes" class="text-danger"></span>
+                </div>
+                <div class="col-md-8 js-authority-field">
+                    <label class="form-label" asp-for="Authority"></label>
+                    <input asp-for="Authority" class="form-control js-provider-authority" placeholder="https://accounts.google.com" />
+                    <div class="form-hint">Genel OpenID Connect için zorunlu (discovery adresi). Google, GitHub ve LinkedIn bunu boş bırakır.</div>
+                    <span asp-validation-for="Authority" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="SortOrder"></label>
+                    <input asp-for="SortOrder" class="form-control" />
+                    <div class="form-hint">Küçük sayılar giriş sayfasında önce görünür.</div>
+                    <span asp-validation-for="SortOrder" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <label class="form-check">
+                        <input asp-for="Enabled" class="form-check-input" />
+                        <span class="form-check-label">Bu düğmeyi giriş sayfasında göster</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <a asp-action="Index" class="btn">Vazgeç</a>
+        </div>
+    </form>
+</div>

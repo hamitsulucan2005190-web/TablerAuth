@@ -1,0 +1,15 @@
+---
+description: Keep the local TablerAuth web server running; do not restart or kill it
+alwaysApply: true
+---
+
+# Geliştirme sunucusu açık kalsın
+
+Tarayıcıdaki "Connection failed" çoğu zaman uygulamanın kapanmasından gelir. Agent `dotnet run` sürecini sohbet bitince öldürürse adres cevap vermez.
+
+- Port 5059 veya 7258 dinliyorsa: yeniden başlatma, kill etme, `docker compose down` yapma.
+- Kapalıysa: `/tmp/tablerauth-keepup.sh` çalışıyorsa dokunma. Değilse `nohup /tmp/tablerauth-keepup.sh >/tmp/tablerauth-keepup.log 2>&1 & disown` ile aç (komut hemen bitsin; `block_until_ms: 0` ile `dotnet run` takibi YAPMA — sohbet/görev abort sunucuyu öldürür).
+- `dotnet watch` kullanma.
+- Sohbet bitince süreci kapatma. Cursor uygulaması kapanınca keepup script sunucuyu kendisi durdurur.
+- Sayfa kontrolü için sunucuyu aç-kapa yapma; `curl http://localhost:5059/` yeter.
+- MSSQL konteyneri (`tablerauth-mssql`) zaten `restart: unless-stopped`; onu da durdurma.

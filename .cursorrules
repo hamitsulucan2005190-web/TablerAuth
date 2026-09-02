@@ -1,19 +1,19 @@
 # Proje: Dinamik IdentityProvider Destekli Auth Sistemi (ASP.NET Core MVC + JWT)
 
 ## Genel
-Staj projesi. Kullanıcılar e-posta/şifre ve dış sağlayıcılarla (Google, Microsoft, GitHub, LinkedIn)
+Staj projesi. Kullanıcılar e-posta/şifre ve dış sağlayıcılarla (Google, GitHub, LinkedIn)
 giriş yapar. JWT, rol/yetki bazlı menü. Sağlayıcı ayarları mümkün olduğunca DB'den okunur.
 
 Yol haritası: docs/PLAN.md. Her günün sonunda docs/gunluk-raporlar/YYYY-MM-DD.md yaz
 (üç başlık: plan, sorunlar, çözümler). Şablon: docs/gunluk-raporlar/SABLON.md.
 
 Ön yüz kilitli: Razor MVC (.cshtml). React/Angular yok.
-4. OAuth sağlayıcısı: LinkedIn. Faz 6 (yalnızca Google) bitmeden diğer sağlayıcılara geçme.
+Dış giriş: Google, GitHub, LinkedIn (üç). Facebook/Microsoft yok. Faz 6 (yalnızca Google) bitmeden diğer sağlayıcılara geçme.
 
 ## Teknoloji (değiştirme)
 - Backend: ASP.NET Core MVC (.NET 8), C#
 - Auth: ASP.NET Core Identity + JWT Bearer (access + refresh)
-- Dış giriş: OAuth2 / OIDC — Google, Microsoft/Entra ID, GitHub, LinkedIn
+- Dış giriş: OAuth2 / OIDC — Google, GitHub, LinkedIn
 - Veritabanı: MSSQL + EF Core (Code First, Migrations)
 - Test: xUnit (opsiyonel, tercih edilir)
 
@@ -43,6 +43,9 @@ Derlenebilir kod; hayali NuGet yok.
 Auth/secret konusunda kısayol önerme; production-ready pratik.
 Belirsiz gereksinimde varsayma; sor.
 
+Geliştirme sunucusu: 5059/7258 dinliyorsa dokunma (yeniden başlatma, kill, docker compose down yok).
+Kapalıysa `/tmp/tablerauth-keepup.sh` ile aç (Cursor açıkken ayakta kalır, Cursor kapanınca durur). Agent arka plan görevi olarak `dotnet run` takibi yapma; sohbet abort sunucuyu öldürür. `dotnet watch` kullanma.
+
 ## Değişiklik sonrası anlatım (her seferinde zorunlu)
 Projede bir şey değiştirdiğinde (kod, config, dosya, kural) iş bitince kullanıcıya
 sade dilde, jargon sıkıştırmadan şunları anlat. "Önemli adım" şartı yok; her değişiklik.
@@ -59,4 +62,4 @@ AccountController ve AuthService değişti. Kayıt ol → giriş yap ile deneyeb
 - God Controller
 - Sadece frontend rol gizleme
 - Migration'ı manuel SQL ile atlama
-- Faz 6 bitmeden Microsoft/GitHub/LinkedIn ekleme
+- Faz 6 bitmeden GitHub/LinkedIn ekleme
