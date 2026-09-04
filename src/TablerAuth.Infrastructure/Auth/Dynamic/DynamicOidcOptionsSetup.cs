@@ -50,6 +50,7 @@ internal sealed class DynamicOidcOptionsSetup : IConfigureNamedOptions<OpenIdCon
         }
 
         options.Events.OnRemoteFailure = ExternalProviderEventDefaults.HandleRemoteFailure;
+        options.Events.OnRedirectToIdentityProvider = ExternalProviderEventDefaults.ForceOidcAccountPicker;
     }
 
     public void Configure(OpenIdConnectOptions options)

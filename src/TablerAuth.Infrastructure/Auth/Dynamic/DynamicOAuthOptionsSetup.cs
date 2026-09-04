@@ -49,6 +49,7 @@ internal abstract class DynamicOAuthOptionsSetup<TOptions> : IConfigureNamedOpti
         }
 
         options.Events.OnRemoteFailure = ExternalProviderEventDefaults.HandleRemoteFailure;
+        options.Events.OnRedirectToAuthorizationEndpoint = ExternalProviderEventDefaults.ForceAccountPicker;
 
         ConfigureProvider(provider, options);
     }

@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace TablerAuth.Infrastructure.Auth.Dynamic;
@@ -24,6 +26,27 @@ internal static class ExternalProviderEventDefaults
         context.Response.Redirect(
             QueryHelpers.AddQueryString(target, "remoteError", "external_failure"));
 
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Google / GitHub / LinkedIn tarayıcıdaki tek oturumu hatırlayıp sessizce
+    /// giriş yapmasın; kullanıcı her seferinde hangi hesabı kullanacağını seçsin.
+    /// </summary>
+    public static Task ForceAccountPicker(RedirectContext<OAuthOptions> context)
+    {
+        context.Response.Redirect(
+            QueryHelpers.AddQueryString(context.RedirectUri, "prompt", "select_account"));
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Generic OIDC için aynı hesap seçici. OAuth olayından ayrıdır çünkü
+    /// OpenID Connect <c>prompt</c> değerini protokol mesajına yazar.
+    /// </summary>
+    public static Task ForceOidcAccountPicker(RedirectContext context)
+    {
+        context.ProtocolMessage.Prompt = "select_account";
         return Task.CompletedTask;
     }
 }
